@@ -58,8 +58,8 @@ app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFuncti
 const port = process.env.PORT || 3000
 app.listen(port, () => {
   console.log(`line bot is listening on http://localhost:${port}`)
-  // interval
-  console.log('run interval--------------')
-  pushMsg.cpblPlayerTrans(client)
-  console.log('run interval over--------------')
 })
+
+// start interval
+console.log('run interval--------------')
+pushMsg.cpblPlayerTrans(client)
