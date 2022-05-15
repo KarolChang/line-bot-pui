@@ -2,7 +2,7 @@ import { Client, WebhookEvent, TextMessage, Message } from '@line/bot-sdk'
 import { Base64 } from 'js-base64'
 import UserAPI from '../apis/user'
 
-const handleMsg = {
+export default {
   reply: (client: Client, event: WebhookEvent) => {
     if (event.type !== 'message' || event.message.type !== 'text') {
       return Promise.resolve(null)
@@ -142,5 +142,3 @@ const handleMsg = {
     client.replyMessage(event.replyToken, echo)
   }
 }
-
-export default handleMsg

@@ -4,20 +4,17 @@ import {
   JSONParseError,
   SignatureValidationFailed,
   ClientConfig,
-  MiddlewareConfig,
-  WebhookEvent,
-  Message,
-  FlexMessage
+  MiddlewareConfig
 } from '@line/bot-sdk'
 import express from 'express'
 import { Express, Request, Response, NextFunction, ErrorRequestHandler } from 'express'
-import { Base64 } from 'js-base64'
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
 // import utils
 import handleMsg from './utils/handleMsg'
+import pushMsg from './utils/PushMsg'
 
 // create LINE SDK config from env variables
 const config: ClientConfig = {
@@ -33,11 +30,10 @@ const app: Express = express()
 
 // register a webhook handler with middleware
 app.post('/callback', middleware(config as MiddlewareConfig), async (req: Request, res: Response) => {
-  console.log('req,body.destination!!!', req.body.destination)
   console.log('req.body.events!!!', req.body.events)
   const event = req.body.events[0]
   try {
-    await handleMsg.reply(client, event)
+    // await handleMsg.reply(client, event)
     await handleMsg.link(client, event)
     await handleMsg.linked(client, event)
   } catch (err) {
@@ -62,4 +58,8 @@ app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFuncti
 const port = process.env.PORT || 3000
 app.listen(port, () => {
   console.log(`line bot is listening on http://localhost:${port}`)
+  // interval
+  console.log('run interval--------------')
+  pushMsg.cpblPlayerTrans(client)
+  console.log('run interval over--------------')
 })
