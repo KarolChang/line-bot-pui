@@ -1,18 +1,18 @@
-import { Client, WebhookEvent, TextMessage, Message } from '@line/bot-sdk'
+import { Client } from '@line/bot-sdk'
 import cpblAPI from '../apis/cpbl'
 import dayjs from 'dayjs'
 
 export default {
   cpblPlayerTrans: (client: Client) => {
     // 每 10 分鐘去 call api
-    const intervalTool = setInterval(async () => {
+    const intervalTool = setInterval(async function () {
       const nowTime = dayjs().format('YYYY:MM:DD hh:mm:ss a')
       console.log('nowTime!!!!!!', nowTime)
 
       const { data } = await cpblAPI.playerTrans(String(dayjs().year()), String(dayjs().month() + 1))
       console.log('data!!!!!!!!!', data)
 
-      const today = dayjs().format('YYYY-MM-DD')
+      const today = dayjs().format('YYYY/MM/DD')
       if (data[today]) {
         const todayTrans = data[today]
         let pushText = `${today} 今日球員異動：`

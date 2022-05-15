@@ -61,5 +61,5 @@ app.listen(port, () => {
 })
 
 // start interval
-console.log('run interval--------------')
+console.log('-------run interval-------')
 pushMsg.cpblPlayerTrans(client)
