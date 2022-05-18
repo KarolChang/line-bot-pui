@@ -1,4 +1,4 @@
-import { Client } from '@line/bot-sdk'
+import { Client, Message } from '@line/bot-sdk'
 import cpblAPI from '../apis/cpbl'
 import dayjs from 'dayjs'
 import cron, { getTasks } from 'node-cron'
@@ -51,10 +51,75 @@ export default {
         console.log('getTask: ', getTasks())
       }
     })
+  },
+  cpblVoteCron: (client: Client) => {
+    const echo: Message = {
+      type: 'flex',
+      altText: '臭建喵投票!',
+      contents: {
+        type: 'bubble',
+        hero: {
+          type: 'image',
+          url: 'https://upload.wikimedia.org/wikipedia/zh/thumb/7/74/CPBL_logo.svg/1200px-CPBL_logo.svg.png',
+          size: 'lg'
+        },
+        body: {
+          type: 'box',
+          layout: 'vertical',
+          contents: [
+            {
+              type: 'text',
+              text: '中職明星賽投票',
+              weight: 'bold',
+              size: 'lg',
+              align: 'center'
+            },
+            {
+              type: 'box',
+              layout: 'baseline',
+              margin: 'md',
+              contents: [
+                {
+                  type: 'text',
+                  text: '每個帳號一天可以投2次!!!',
+                  size: 'sm',
+                  color: '#0514f0',
+                  margin: 'md',
+                  align: 'center',
+                  wrap: true
+                }
+              ]
+            }
+          ]
+        },
+        footer: {
+          type: 'box',
+          layout: 'vertical',
+          spacing: 'sm',
+          contents: [
+            {
+              type: 'button',
+              style: 'link',
+              height: 'sm',
+              action: {
+                type: 'uri',
+                label: '投票去',
+                uri: 'https://sports.campaign.yahoo.com.tw/cpbl-allstar/2022/m/?guce_referrer=aHR0cHM6Ly93d3cuY3BibC5jb20udHcv&guce_referrer_sig=AQAAAMpah4xUYDT8_kFTyDxO7H_QDdoYKg9hsILFSSrnnAL5gdxgdfu-nS8zTrly9l8gEp1Q5_wtUKJSewLqr-cWFzGceKpVKG_SYNqGnv-rvBcJQqpEETxGOHkkYYopBF4fbfSFrW2wQzIzZk2BvxoQkxr3I-1kEzfiK0pS895G_7oD'
+              }
+            }
+          ],
+          flex: 0
+        },
+        size: 'kilo',
+        styles: {
+          hero: {
+            backgroundColor: '#98e3ed'
+          }
+        }
+      }
+    }
+    cron.schedule('0 17 * * *', async () => {
+      client.broadcast(echo)
+    })
   }
-  // wakeUpTask: () => {
-  //   cron.schedule('25 16 * * *', async () => {
-  //     task.start()
-  //   })
-  // }
 }

@@ -61,5 +61,6 @@ app.listen(port, () => {
 })
 
 // start interval
-console.log('-------run cpblPlayerTranCron-------')
+console.log('-------run cron-------')
 pushMsg.cpblPlayerTransCron(client)
+pushMsg.cpblVoteCron(client)
