@@ -29,7 +29,7 @@ export default {
     // 600000
   },
   cpblPlayerTransCron: (client: Client) => {
-    cron.schedule('*/10 8-11 * * *', async () => {
+    const task = cron.schedule('*/10 8-11 * * *', async () => {
       console.log('start cpblPlayerTransCron!!!', new Date().toLocaleString())
 
       const { data } = await cpblAPI.playerTrans(String(dayjs().year()), String(dayjs().month() + 1))
@@ -44,10 +44,9 @@ export default {
           pushText += text
         }
         console.log('pushText!!!!!!', pushText)
-        // client.broadcast({ type: 'text', text: pushText })
-        // clearInterval(intervalTool)
-        // task.stop()
-        // console.log('clearInterval!!!')
+        client.broadcast({ type: 'text', text: pushText })
+        task.stop()
+        console.log('task stop!!!')
       } else {
         console.log('今天的球員異動還未發佈!')
       }
