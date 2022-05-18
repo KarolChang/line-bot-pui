@@ -29,7 +29,7 @@ export default {
     // 600000
   },
   cpblPlayerTransCron: (client: Client) => {
-    cron.schedule('*/10 16-19 * * *', async () => {
+    cron.schedule('*/10 8-11 * * *', async () => {
       console.log('start cpblPlayerTransCron!!!', new Date().toLocaleString())
 
       const { data } = await cpblAPI.playerTrans(String(dayjs().year()), String(dayjs().month() + 1))
@@ -120,7 +120,7 @@ export default {
       }
     }
     try {
-      cron.schedule('0 17 * * *', async () => {
+      cron.schedule('0 9 * * *', async () => {
         console.log('start cpblVoteCron!!!', new Date().toLocaleString())
 
         client.broadcast(echo)
