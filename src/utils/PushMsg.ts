@@ -45,9 +45,10 @@ export default {
         client.broadcast({ type: 'text', text: pushText })
         // clearInterval(intervalTool)
         // task.stop()
-        console.log('clearInterval!!!')
+        // console.log('clearInterval!!!')
       } else {
         console.log('今天的球員異動還未發佈!')
+        console.log('getTask: ', getTasks())
       }
     })
   }
