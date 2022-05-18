@@ -29,7 +29,9 @@ export default {
     // 600000
   },
   cpblPlayerTransCron: (client: Client) => {
-    const task = cron.schedule('*/10 16-19 * * *', async () => {
+    cron.schedule('*/10 16-19 * * *', async () => {
+      console.log('start cpblPlayerTransCron!!!', new Date().toLocaleString())
+
       const { data } = await cpblAPI.playerTrans(String(dayjs().year()), String(dayjs().month() + 1))
       console.log('data!!!!!!!!!', data)
 
@@ -42,17 +44,16 @@ export default {
           pushText += text
         }
         console.log('pushText!!!!!!', pushText)
-        client.broadcast({ type: 'text', text: pushText })
+        // client.broadcast({ type: 'text', text: pushText })
         // clearInterval(intervalTool)
         // task.stop()
         // console.log('clearInterval!!!')
       } else {
         console.log('今天的球員異動還未發佈!')
-        console.log('getTask: ', getTasks())
       }
     })
   },
-  cpblVoteCron: (client: Client) => {
+  cpblVoteCron: async (client: Client) => {
     const echo: Message = {
       type: 'flex',
       altText: '臭建喵投票!',
@@ -118,8 +119,14 @@ export default {
         }
       }
     }
-    cron.schedule('0 17 * * *', async () => {
-      client.broadcast(echo)
-    })
+    try {
+      cron.schedule('0 17 * * *', async () => {
+        console.log('start cpblVoteCron!!!', new Date().toLocaleString())
+
+        client.broadcast(echo)
+      })
+    } catch (error) {
+      console.log('[ERROR-cpblVoteCron]', error)
+    }
   }
 }

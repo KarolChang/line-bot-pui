@@ -8,6 +8,7 @@ import {
 } from '@line/bot-sdk'
 import express from 'express'
 import { Express, Request, Response, NextFunction, ErrorRequestHandler } from 'express'
+import { getTasks } from 'node-cron'
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
@@ -61,6 +62,7 @@ app.listen(port, () => {
 })
 
 // start interval
-console.log('-------run cron-------')
+console.log('-------run cron-------', new Date().toLocaleString())
 pushMsg.cpblPlayerTransCron(client)
 pushMsg.cpblVoteCron(client)
+console.log('-------task length-------', getTasks().length)
