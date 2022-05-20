@@ -29,6 +29,12 @@ const client: Client = new Client(config)
 const app: Express = express()
 // app.use(cors())
 
+// view
+app.get('/', (req: Request, res: Response) => {
+  const time = new Date().toLocaleString()
+  res.send(`Line Bot Pui !!!\n${time}`)
+})
+
 // register a webhook handler with middleware
 app.post('/callback', middleware(config as MiddlewareConfig), async (req: Request, res: Response) => {
   console.log('req.body.events!!!', req.body.events)
