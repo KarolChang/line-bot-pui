@@ -1,0 +1,7 @@
+{
+  "ignore": [".git", "node_modules/", "dist/"],
+  "watch": ["src/", "."],
+  "ext": "js,json,ts",
+  "delay": 2000,
+  "trace-warnings": true
+}

@@ -1,13 +1,22 @@
 import { Client, WebhookEvent, TextMessage, Message } from '@line/bot-sdk'
-import { Base64 } from 'js-base64'
-import UserAPI from '../apis/user'
+import { GoogleSheet } from '../sheet/config'
 
 export default {
-  reply: (client: Client, event: WebhookEvent) => {
+  reply: async (client: Client, event: WebhookEvent, sheet: GoogleSheet) => {
     if (event.type !== 'message' || event.message.type !== 'text') {
       return Promise.resolve(null)
     }
-    const echo: TextMessage = { type: 'text', text: `有笨蛋說：${event.message.text}` }
+
+    let text: string
+
+    if (event.message.text === '今日待辦') {
+      const notes = await sheet.getNotes()
+      text = notes === '' ? '今日無提醒事項' : notes
+    } else {
+      text = '你說什麼 大聲點!!!'
+    }
+
+    const echo: TextMessage = { type: 'text', text }
     client.replyMessage(event.replyToken, echo)
   },
   link: async (client: Client, event: WebhookEvent) => {
@@ -71,65 +80,6 @@ export default {
             }
           ],
           flex: 0
-        },
-        size: 'kilo',
-        styles: {
-          hero: {
-            backgroundColor: '#98e3ed'
-          }
-        }
-      }
-    }
-    client.replyMessage(event.replyToken, echo)
-  },
-  linked: async (client: Client, event: WebhookEvent) => {
-    if (event.type !== 'accountLink' || event.link.result !== 'ok') {
-      return Promise.resolve(null)
-    }
-    // 修改 lineUserId
-    const email = Base64.decode(event.link.nonce)
-    const lineUserId = event.source.userId!
-    await UserAPI.bindingLineUserId(email, lineUserId)
-    // 傳送訊息
-    const echo: Message = {
-      type: 'flex',
-      altText: '笨建喵 好嗨!',
-      contents: {
-        type: 'bubble',
-        hero: {
-          type: 'image',
-          aspectRatio: '4:3',
-          url: 'https://i.imgur.com/thnpXTN.jpg',
-          size: 'lg'
-        },
-        body: {
-          type: 'box',
-          layout: 'vertical',
-          contents: [
-            {
-              type: 'text',
-              text: '連動成功！',
-              weight: 'bold',
-              size: 'lg',
-              align: 'center'
-            },
-            {
-              type: 'box',
-              layout: 'baseline',
-              margin: 'md',
-              contents: [
-                {
-                  type: 'text',
-                  text: '你現在可以透過LINE\n來接收JM-Expense的通知訊息了！',
-                  size: 'sm',
-                  color: '#0514f0',
-                  margin: 'md',
-                  align: 'center',
-                  wrap: true
-                }
-              ]
-            }
-          ]
         },
         size: 'kilo',
         styles: {
